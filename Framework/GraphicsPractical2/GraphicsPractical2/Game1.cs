@@ -71,6 +71,16 @@ namespace GraphicsPractical2
             this.model.Meshes[0].MeshParts[0].Effect = effect;
             // Setup the quad
             this.setupQuad();
+
+            modelMaterial = new Material();
+            effect.Parameters["LightingPosition"].SetValue(new Vector4(50, 50, 50, 1));
+            modelMaterial.DiffuseColor = Color.Red;
+            modelMaterial.AmbientColor = Color.Red;
+            modelMaterial.AmbientIntensity = 0.2f;
+            modelMaterial.SpecularColor = Color.White;
+            modelMaterial.SpecularIntensity = 2.0f;
+            modelMaterial.SpecularPower = 25.0f;
+            modelMaterial.SetEffectParameters(effect);
         }
 
         /// <summary>

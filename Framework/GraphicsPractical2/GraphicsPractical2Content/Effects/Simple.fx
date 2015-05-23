@@ -9,6 +9,16 @@
 // Matrices for 3D perspective projection 
 float4x4 View, Projection, World;
 
+float4 LightingPosition;
+float4 DiffuseColor;
+
+float4 AmbientColor;
+float AmbientIntensity;
+
+float4 SpecularColor;
+float SpecularIntensity;
+float SpecularPower;
+
 //---------------------------------- Input / Output structures ----------------------------------
 
 // Each member of the struct has to be given a "semantic", to indicate what kind of data should go in
@@ -56,6 +66,30 @@ float4 ProceduralColor(float4 pos, float4 Normal)
 	return color;	
 }
 
+float4 LambertianShading(float4 Position, float4 Normal)
+{
+	return DiffuseColor * max(0, dot(normalize(Normal), normalize(LightingPosition - Position)));
+}
+
+float4 AmbientShading()
+{
+	return AmbientColor * AmbientIntensity;
+}
+
+float4 BlinnPhongShading(float4 Position, float4 Normal)
+{  //WERKT NOG NIET
+	float4 viewPosition = float4(0, 50, 100, 0);
+	float4 viewDirection = normalize(viewPosition - Position);
+	float4 lightDirection = normalize(LightingPosition - Position);
+
+	float3 H = normalize(lightDirection + viewDirection);
+	float NdotH = dot(Normal, H);
+	float intensity = pow(saturate(NdotH), SpecularIntensity);
+
+	float distance = length(LightingPosition - Position);
+	return intensity * SpecularColor * SpecularPower / distance;
+}
+
 //---------------------------------------- Technique: Simple ----------------------------------------
 
 VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
@@ -67,15 +101,18 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	float4 worldPosition = mul(input.Position3D, World);
     float4 viewPosition  = mul(worldPosition, View);
 	output.Position2D    = mul(viewPosition, Projection);
-	output.Normal = input.Normal;
 	output.Position3D = input.Position3D;
+	
+	float3x3 rotationAndScale = (float3x3)World;
+	float3 newNormal = normalize(mul(input.Normal, rotationAndScale));
+	output.Normal.xyz = newNormal;
 
 	return output;
 }
 
 float4 SimplePixelShader(VertexShaderOutput input) : COLOR0
 {
-	float4 color = ProceduralColor(input.Position3D, input.Normal);
+	float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();// +BlinnPhongShading(input.Position3D, input.Normal);
 
 	return color;
 }
