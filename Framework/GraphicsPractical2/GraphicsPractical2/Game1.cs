@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace GraphicsPractical2
 {
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         // Often used XNA objects
@@ -29,6 +30,9 @@ namespace GraphicsPractical2
         private VertexPositionNormalTexture[] quadVertices;
         private short[] quadIndices;
         private Matrix quadTransform;
+
+        //Worldmatrix
+        private Matrix world;
 
         public Game1()
         {
@@ -62,6 +66,8 @@ namespace GraphicsPractical2
 
         protected override void LoadContent()
         {
+            //Create WorldMatrix
+            world = new Matrix(10.0f, 0, 0, 0, 0, 20.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
             // Create a SpriteBatch object
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             // Load the "Simple" effect
@@ -134,11 +140,20 @@ namespace GraphicsPractical2
             effect.CurrentTechnique = effect.Techniques["Simple"];
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
-            effect.Parameters["World"].SetValue(Matrix.CreateScale(10.0f));
+            effect.Parameters["World"].SetValue(world);
+            effect.Parameters["InverseTransposed"].SetValue(InverseTransposed(world));
             // Draw the model
             mesh.Draw();
 
             base.Draw(gameTime);
+        }
+
+        protected Matrix InverseTransposed(Matrix i)
+        {
+            Matrix3 it = new Matrix3(i.M11, i.M12, i.M13, i.M21, i.M22, i.M23, i.M31, i.M32, i.M33);
+            Matrix3.Transpose(Matrix3.Inverse(it));
+            return new Matrix(it.M11, it.M12, it.M13, 0, it.M21, it.M22, it.M23, 0, it.M31, it.M32, it.M33, 0, 0, 0, 0, 0);
+
         }
     }
 }
