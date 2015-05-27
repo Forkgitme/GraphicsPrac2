@@ -67,7 +67,7 @@ namespace GraphicsPractical2
         protected override void LoadContent()
         {
             //Create WorldMatrix
-            world = new Matrix(10.0f, 0, 0, 0, 0, 20.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
+            world = new Matrix(25, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
             // Create a SpriteBatch object
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             // Load the "Simple" effect

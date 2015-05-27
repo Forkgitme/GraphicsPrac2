@@ -103,8 +103,8 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.Position3D = input.Position3D;
 	
-	float3x3 rotationAndScale = (float3x3)World;
-	float3 newNormal = normalize(mul(input.Normal, rotationAndScale));
+	/*float3x3 rotationAndScale = (float3x3)World;*/
+	float3 newNormal = normalize(mul(input.Normal, (float3x3)InverseTransposed));
 	output.Normal.xyz = newNormal;
 
 	return output;
