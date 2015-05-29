@@ -19,6 +19,8 @@ float4 SpecularColor;
 float SpecularIntensity;
 float SpecularPower;
 
+float PhongBool;
+
 //---------------------------------- Input / Output structures ----------------------------------
 
 // Each member of the struct has to be given a "semantic", to indicate what kind of data should go in
@@ -76,18 +78,27 @@ float4 AmbientShading()
 	return AmbientColor * AmbientIntensity;
 }
 
-float4 BlinnPhongShading(float4 Position, float4 Normal)
-{  //WERKT NOG NIET
+float4 PhongShading(float4 Position, float4 Normal)
+{
 	float4 viewPosition = float4(0, 50, 100, 0);
 	float4 viewDirection = normalize(viewPosition - Position);
 	float4 lightDirection = normalize(LightingPosition - Position);
 
-	float3 H = normalize(lightDirection + viewDirection);
-	float NdotH = dot(Normal, H);
-	float intensity = pow(saturate(NdotH), SpecularIntensity);
+	float4 reflectDirection = reflect(-lightDirection, Normal);
+	float angle = saturate(dot(reflectDirection, viewDirection));
+	return pow(angle, SpecularIntensity) * SpecularColor;
+}
 
-	float distance = length(LightingPosition - Position);
-	return intensity * SpecularColor * SpecularPower / distance;
+float4 BlinnPhongShading(float4 Position, float4 Normal)
+{
+	float4 viewPosition = float4(0, 50, 100, 0);
+	float4 viewDirection = normalize(viewPosition - Position);
+	float4 lightDirection = normalize(LightingPosition - Position);
+
+	float3 halfDirection = normalize(lightDirection + viewDirection);
+	float angle = saturate(dot(halfDirection, Normal));
+
+	return pow(angle, SpecularIntensity * 4) * SpecularColor;
 }
 
 //---------------------------------------- Technique: Simple ----------------------------------------
@@ -112,7 +123,8 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 
 float4 SimplePixelShader(VertexShaderOutput input) : COLOR0
 {
-	float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();// +BlinnPhongShading(input.Position3D, input.Normal);
+	float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();
+	color += PhongShading(input.Position3D, input.Normal) * PhongBool + BlinnPhongShading(input.Position3D, input.Normal) * (1 - PhongBool);
 
 	return color;
 }

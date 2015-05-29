@@ -30,6 +30,9 @@ namespace GraphicsPractical2
         private short[] quadIndices;
         private Matrix quadTransform;
 
+        private KeyboardState previousKS, currentKS;
+        private bool phongShading = false;
+
         public Game1()
         {
             this.graphics = new GraphicsDeviceManager(this);
@@ -74,6 +77,7 @@ namespace GraphicsPractical2
 
             modelMaterial = new Material();
             effect.Parameters["LightingPosition"].SetValue(new Vector4(50, 50, 50, 1));
+            effect.Parameters["PhongBool"].SetValue(0f);
             modelMaterial.DiffuseColor = Color.Red;
             modelMaterial.AmbientColor = Color.Red;
             modelMaterial.AmbientIntensity = 0.2f;
@@ -113,10 +117,19 @@ namespace GraphicsPractical2
 
         protected override void Update(GameTime gameTime)
         {
+            previousKS = currentKS;
+            currentKS = Keyboard.GetState();
+
+            if (currentKS.IsKeyDown(Keys.P) && previousKS.IsKeyUp(Keys.P))
+            {
+                phongShading = !phongShading;
+                this.model.Meshes[0].MeshParts[0].Effect.Parameters["PhongBool"].SetValue(phongShading ? 1f : 0f);
+            }
+
             float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds * 60.0f;
 
             // Update the window title
-            this.Window.Title = "XNA Renderer | FPS: " + this.frameRateCounter.FrameRate;
+            this.Window.Title = "XNA Renderer | FPS: " + this.frameRateCounter.FrameRate + " | Phong: " + phongShading;
 
             base.Update(gameTime);
         }
