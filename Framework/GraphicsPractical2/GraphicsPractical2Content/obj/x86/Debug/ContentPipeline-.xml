@@ -8,7 +8,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\Simple.xnb</Output>
-      <Time>2015-05-12T10:16:19.7957752+02:00</Time>
+      <Time>2015-05-27T17:52:26.0270265+02:00</Time>
     </Item>
     <Item>
       <Source>Models\Teapot.fbx</Source>
@@ -20,7 +20,7 @@
       <Time>2014-04-29T15:46:28+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\Teapot_0.xml</Key>
-        <Value>2015-05-12T09:32:40.2389551+02:00</Value>
+        <Value>2015-05-27T16:42:13.4416788+02:00</Value>
       </Dependency>
     </Item>
     <Item>
