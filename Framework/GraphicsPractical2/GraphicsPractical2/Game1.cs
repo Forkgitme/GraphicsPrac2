@@ -31,7 +31,14 @@ namespace GraphicsPractical2
         private short[] quadIndices;
         private Matrix quadTransform;
 
+        // The gamma correction post-processing shader
+        Effect gammaCorrection;
+        RenderTarget2D renderTarget;
+
+        // Keyboard state
         private KeyboardState previousKS, currentKS;
+
+        // Bool which determines whether Phong or Blinn-Phon shading is used
         private bool phongShading = false;
 
         //Worldmatrix
@@ -70,7 +77,8 @@ namespace GraphicsPractical2
         protected override void LoadContent()
         {
             //Create WorldMatrix
-            world = new Matrix(25, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
+            //world = new Matrix(25, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
+            world = new Matrix(10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
             // Create a SpriteBatch object
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             // Load the "Simple" effect
@@ -80,6 +88,11 @@ namespace GraphicsPractical2
             this.model.Meshes[0].MeshParts[0].Effect = effect;
             // Setup the quad
             this.setupQuad();
+
+            gammaCorrection = this.Content.Load<Effect>("Effects/PostProcessing");
+            renderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth,
+                GraphicsDevice.PresentationParameters.BackBufferHeight, true, GraphicsDevice.PresentationParameters.BackBufferFormat,
+                DepthFormat.Depth24);
 
             modelMaterial = new Material();
             effect.Parameters["LightingPosition"].SetValue(new Vector4(50, 50, 50, 1));
@@ -143,6 +156,7 @@ namespace GraphicsPractical2
         protected override void Draw(GameTime gameTime)
         {
             // Clear the screen in a predetermined color and clear the depth buffer
+            this.GraphicsDevice.SetRenderTarget(renderTarget);
             this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
             
             // Get the model's only mesh
@@ -157,6 +171,15 @@ namespace GraphicsPractical2
             effect.Parameters["InverseTransposed"].SetValue(InverseTransposed(world));
             // Draw the model
             mesh.Draw();
+
+            this.GraphicsDevice.SetRenderTarget(null);
+
+            GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.Default,
+                RasterizerState.CullNone, gammaCorrection);
+            spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
