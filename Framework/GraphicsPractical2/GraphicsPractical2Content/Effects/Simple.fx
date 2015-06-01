@@ -115,7 +115,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position3D = input.Position3D;
 	
 	/*float3x3 rotationAndScale = (float3x3)World;*/
-	float3 newNormal = normalize(mul(input.Normal, (float3x3)InverseTransposed));
+	float3 newNormal = normalize(mul((float3x3)InverseTransposed, input.Normal));
 	output.Normal.xyz = newNormal;
 
 	return output;
