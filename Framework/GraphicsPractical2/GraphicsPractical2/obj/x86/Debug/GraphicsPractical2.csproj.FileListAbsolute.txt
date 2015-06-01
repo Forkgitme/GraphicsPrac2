@@ -7,3 +7,4 @@ C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\Graph
 C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.exe
 C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.pdb
+C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.csprojResolveAssemblyReference.cache
