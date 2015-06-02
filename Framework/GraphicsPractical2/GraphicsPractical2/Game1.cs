@@ -34,7 +34,7 @@ namespace GraphicsPractical2
         // Texture
         private Texture2D texture;
 
-        // The gamma correction post-processing shader
+        // The gamma correction post-processing shader and a texture to draw to later on
         Effect gammaCorrection;
         RenderTarget2D renderTarget;
 
@@ -164,8 +164,9 @@ namespace GraphicsPractical2
 
         protected override void Draw(GameTime gameTime)
         {
-            // Clear the screen in a predetermined color and clear the depth buffer
+            // Render everything to a texture
             this.GraphicsDevice.SetRenderTarget(renderTarget);
+            // Clear the screen in a predetermined color and clear the depth buffer
             this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
             
             // Get the model's only mesh
@@ -194,10 +195,13 @@ namespace GraphicsPractical2
                 GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, quadVertices, 0, 4, quadIndices, 0, 2);
             }
 
+            // Render everything to the back buffer
             this.GraphicsDevice.SetRenderTarget(null);
 
+            // Clear the screen again
             GraphicsDevice.Clear(Color.Black);
 
+            // Draw the texture to the back buffer (screen) with the gamma correction shader applied to it
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.Default,
                 RasterizerState.CullNone, gammaCorrection);
             spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);

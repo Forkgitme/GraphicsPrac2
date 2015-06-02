@@ -98,6 +98,7 @@ float4 PhongShading(float4 Position, float4 Normal)
 	float4 viewDirection = normalize(viewPosition - Position);
 	float4 lightDirection = normalize(LightingPosition - Position);
 
+	// Calculate Phong shading stuff
 	float4 reflectDirection = reflect(-lightDirection, Normal);
 	float angle = saturate(dot(reflectDirection, viewDirection));
 	return pow(angle, SpecularIntensity) * SpecularColor;
@@ -109,9 +110,9 @@ float4 BlinnPhongShading(float4 Position, float4 Normal)
 	float4 viewDirection = normalize(viewPosition - Position);
 	float4 lightDirection = normalize(LightingPosition - Position);
 
+	// Calculate Blinn-Phong shading stuff
 	float3 halfDirection = normalize(lightDirection + viewDirection);
 	float angle = saturate(dot(halfDirection, Normal));
-
 	return pow(angle, SpecularIntensity * 4) * SpecularColor;
 }
 
@@ -128,7 +129,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.Position3D = input.Position3D;
 	
-	/*float3x3 rotationAndScale = (float3x3)World;*/
+	// Calculate the normal with the inverse transposed world matrix
 	float3 newNormal = normalize(mul((float3x3)InverseTransposed, input.Normal));
 	output.Normal.xyz = newNormal;
 
@@ -147,9 +148,11 @@ float4 SimplePixelShader(VertexShaderOutput input, uniform bool bTex) : COLOR0
 	}
 	else
 	{
-		//otherwise use lighting
+		// Otherwise use lighting
 		float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();
-			color += PhongShading(input.Position3D, input.Normal) * PhongBool + BlinnPhongShading(input.Position3D, input.Normal) * (1 - PhongBool);
+		// Use the PhongBool float to determine whether to use Phong shading of Blinn-Phong shading
+		// And look, no if-statement
+		color += PhongShading(input.Position3D, input.Normal) * PhongBool + BlinnPhongShading(input.Position3D, input.Normal) * (1 - PhongBool);
 
 		return color;
 	}

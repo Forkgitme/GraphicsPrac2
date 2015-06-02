@@ -7,13 +7,12 @@ sampler ScreenS = sampler_state
 
 float4 GammaShader(float2 texCoord : TEXCOORD0) : COLOR
 {
+	// Get the color of a specific coordinate in the screen
 	float4 color = tex2D(ScreenS, texCoord);
+
+	// Calculate the gamma-corrected color
 	float gamma = 1/1.5;
 	color = pow(color, gamma);
-	/*color.r = pow(color.r, gamma);
-	color.g = pow(color.g, gamma);
-	color.b = pow(color.b, gamma);
-	color.a = pow(color.a, gamma);*/
 	return color;
 }
 technique
