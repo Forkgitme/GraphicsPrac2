@@ -123,19 +123,19 @@ namespace GraphicsPractical2
 
             this.quadVertices = new VertexPositionNormalTexture[4];
             // Top left
-            this.quadVertices[0].Position = new Vector3(-100, 0, -100);
+            this.quadVertices[0].Position = new Vector3(-10, 0, -10);
             this.quadVertices[0].Normal = quadNormal;
             this.quadVertices[0].TextureCoordinate = new Vector2(0.0f, 1.0f);
             // Top right
-            this.quadVertices[1].Position = new Vector3(100, 0, -100);
+            this.quadVertices[1].Position = new Vector3(10, 0, -10);
             this.quadVertices[1].Normal = quadNormal;
             this.quadVertices[1].TextureCoordinate = new Vector2(1.0f, 1.0f);
             // Bottom left
-            this.quadVertices[2].Position = new Vector3(-100, 0, 100);
+            this.quadVertices[2].Position = new Vector3(-10, 0, 10);
             this.quadVertices[2].Normal = quadNormal;
             this.quadVertices[2].TextureCoordinate = new Vector2(0.0f, 0.0f);
             // Bottom right
-            this.quadVertices[3].Position = new Vector3(100, 0, 100);
+            this.quadVertices[3].Position = new Vector3(10, 0, 10);
             this.quadVertices[3].Normal = quadNormal;
             this.quadVertices[3].TextureCoordinate = new Vector2(1.0f, 0.0f);
 
@@ -187,8 +187,8 @@ namespace GraphicsPractical2
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
 
-                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, quadVertices, 0, 4, quadIndices, 0, 2);
                 pass.Apply();
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, quadVertices, 0, 4, quadIndices, 0, 2);
             }
 
             this.GraphicsDevice.SetRenderTarget(null);
