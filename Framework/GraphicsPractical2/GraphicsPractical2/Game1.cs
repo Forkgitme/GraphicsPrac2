@@ -123,19 +123,19 @@ namespace GraphicsPractical2
 
             this.quadVertices = new VertexPositionNormalTexture[4];
             // Top left
-            this.quadVertices[0].Position = new Vector3(-1, 0, -1);
+            this.quadVertices[0].Position = new Vector3(-100, 0, -100);
             this.quadVertices[0].Normal = quadNormal;
             this.quadVertices[0].TextureCoordinate = new Vector2(0.0f, 1.0f);
             // Top right
-            this.quadVertices[1].Position = new Vector3(1, 0, -1);
+            this.quadVertices[1].Position = new Vector3(100, 0, -100);
             this.quadVertices[1].Normal = quadNormal;
             this.quadVertices[1].TextureCoordinate = new Vector2(1.0f, 1.0f);
             // Bottom left
-            this.quadVertices[2].Position = new Vector3(-1, 0, 1);
+            this.quadVertices[2].Position = new Vector3(-100, 0, 100);
             this.quadVertices[2].Normal = quadNormal;
             this.quadVertices[2].TextureCoordinate = new Vector2(0.0f, 0.0f);
             // Bottom right
-            this.quadVertices[3].Position = new Vector3(1, 0, 1);
+            this.quadVertices[3].Position = new Vector3(100, 0, 100);
             this.quadVertices[3].Normal = quadNormal;
             this.quadVertices[3].TextureCoordinate = new Vector2(1.0f, 0.0f);
 
@@ -182,15 +182,6 @@ namespace GraphicsPractical2
             // Draw the model
             mesh.Draw();
 
-            this.GraphicsDevice.SetRenderTarget(null);
-
-            GraphicsDevice.Clear(Color.Black);
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.Default,
-                RasterizerState.CullNone, gammaCorrection);
-            spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
-            spriteBatch.End();
-
             effect.CurrentTechnique = effect.Techniques["Texture"];
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -199,6 +190,15 @@ namespace GraphicsPractical2
                 GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, quadVertices, 0, 4, quadIndices, 0, 2);
                 pass.Apply();
             }
+
+            this.GraphicsDevice.SetRenderTarget(null);
+
+            GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.Default,
+                RasterizerState.CullNone, gammaCorrection);
+            spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
