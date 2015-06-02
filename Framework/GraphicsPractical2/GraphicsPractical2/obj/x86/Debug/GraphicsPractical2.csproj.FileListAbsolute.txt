@@ -8,3 +8,5 @@ C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\Graph
 C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.exe
 C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.pdb
 C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.csprojResolveAssemblyReference.cache
+C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\PostProcessing.xnb
+C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\Texture.xnb

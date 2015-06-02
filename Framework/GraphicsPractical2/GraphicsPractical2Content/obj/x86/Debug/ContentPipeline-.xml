@@ -8,7 +8,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\Simple.xnb</Output>
-      <Time>2015-06-01T18:09:39.9774378+02:00</Time>
+      <Time>2015-06-02T16:15:50.3117627+02:00</Time>
     </Item>
     <Item>
       <Source>Models\Teapot.fbx</Source>
@@ -47,6 +47,24 @@
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Teapot_0.xml</Output>
       <Time>2014-04-29T15:46:28+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Effects\PostProcessing.fx</Source>
+      <Name>Effects\PostProcessing</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\PostProcessing.xnb</Output>
+      <Time>2015-06-02T14:26:10.1642741+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Effects\Texture.fx</Source>
+      <Name>Effects\Texture</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Robin\Documents\GitHub\GraphicsPrac2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\Texture.xnb</Output>
+      <Time>2015-06-02T16:15:54.6226303+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

@@ -31,6 +31,9 @@ namespace GraphicsPractical2
         private short[] quadIndices;
         private Matrix quadTransform;
 
+        // Texture
+        private Texture2D texture;
+
         // The gamma correction post-processing shader
         Effect gammaCorrection;
         RenderTarget2D renderTarget;
@@ -41,7 +44,7 @@ namespace GraphicsPractical2
         // Bool which determines whether Phong or Blinn-Phon shading is used
         private bool phongShading = false;
 
-        //Worldmatrix
+        // Worldmatrix
         private Matrix world;
 
         public Game1()
@@ -77,8 +80,8 @@ namespace GraphicsPractical2
         protected override void LoadContent()
         {
             //Create WorldMatrix
-            //world = new Matrix(10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
-            world = new Matrix(10.0f, 0, 0, 0, 0, 6.5f, 0, 0, 0, 0, 2.5f, 0, 0, 0, 0, 1f);
+            world = new Matrix(10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 10.0f, 0, 0, 0, 0, 1f);
+            //world = new Matrix(10.0f, 0, 0, 0, 0, 6.5f, 0, 0, 0, 0, 2.5f, 0, 0, 0, 0, 1f);
             // Create a SpriteBatch object
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             // Load the "Simple" effect
@@ -88,6 +91,8 @@ namespace GraphicsPractical2
             this.model.Meshes[0].MeshParts[0].Effect = effect;
             // Setup the quad
             this.setupQuad();
+            // Load the texture
+            this.texture = this.Content.Load<Texture2D>("Textures/CobblestonesDiffuse");          
 
             gammaCorrection = this.Content.Load<Effect>("Effects/PostProcessing");
             renderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth,
@@ -120,15 +125,19 @@ namespace GraphicsPractical2
             // Top left
             this.quadVertices[0].Position = new Vector3(-1, 0, -1);
             this.quadVertices[0].Normal = quadNormal;
+            this.quadVertices[0].TextureCoordinate = new Vector2(0.0f, 1.0f);
             // Top right
             this.quadVertices[1].Position = new Vector3(1, 0, -1);
             this.quadVertices[1].Normal = quadNormal;
+            this.quadVertices[1].TextureCoordinate = new Vector2(1.0f, 1.0f);
             // Bottom left
             this.quadVertices[2].Position = new Vector3(-1, 0, 1);
             this.quadVertices[2].Normal = quadNormal;
+            this.quadVertices[2].TextureCoordinate = new Vector2(0.0f, 0.0f);
             // Bottom right
             this.quadVertices[3].Position = new Vector3(1, 0, 1);
             this.quadVertices[3].Normal = quadNormal;
+            this.quadVertices[3].TextureCoordinate = new Vector2(1.0f, 0.0f);
 
             this.quadIndices = new short[] { 0, 1, 2, 1, 2, 3 };
             this.quadTransform = Matrix.CreateScale(scale);
@@ -169,6 +178,7 @@ namespace GraphicsPractical2
             this.camera.SetEffectParameters(effect);
             effect.Parameters["World"].SetValue(world);
             effect.Parameters["InverseTransposed"].SetValue(Matrix.Transpose(Matrix.Invert(world)));
+            effect.Parameters["tex"].SetValue(texture);
             // Draw the model
             mesh.Draw();
 
@@ -180,6 +190,15 @@ namespace GraphicsPractical2
                 RasterizerState.CullNone, gammaCorrection);
             spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
             spriteBatch.End();
+
+            effect.CurrentTechnique = effect.Techniques["Texture"];
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, quadVertices, 0, 4, quadIndices, 0, 2);
+                pass.Apply();
+            }
 
             base.Draw(gameTime);
         }

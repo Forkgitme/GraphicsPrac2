@@ -21,6 +21,8 @@ float SpecularPower;
 
 float PhongBool;
 
+texture2D tex;
+
 //---------------------------------- Input / Output structures ----------------------------------
 
 // Each member of the struct has to be given a "semantic", to indicate what kind of data should go in
@@ -30,6 +32,7 @@ struct VertexShaderInput
 {
 	float4 Position3D : POSITION0;
 	float4 Normal : NORMAL0;
+	float2 TextureUV : TEXCOORD0;
 };
 
 // The output of the vertex shader. After being passed through the interpolator/rasterizer it is also 
@@ -43,8 +46,16 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
 	float4 Position2D : POSITION0;
+	float2 TextureUV : TEXCOORD0;
 	float4 Normal : TEXCOORD1;
 	float4 Position3D : TEXCOORD2;
+};
+
+SamplerState TextureSampler
+{
+	Filter = MIN_MAG_MIP_LINEAR;
+	AddressU = Wrap;
+	AddressV = Wrap;
 };
 
 //------------------------------------------ Functions ------------------------------------------
@@ -118,15 +129,24 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	float3 newNormal = normalize(mul((float3x3)InverseTransposed, input.Normal));
 	output.Normal.xyz = newNormal;
 
+	output.TextureUV = input.TextureUV;
+
 	return output;
 }
 
-float4 SimplePixelShader(VertexShaderOutput input) : COLOR0
+float4 SimplePixelShader(VertexShaderOutput input, uniform bool bTex) : COLOR0
 {
-	float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();
-	color += PhongShading(input.Position3D, input.Normal) * PhongBool + BlinnPhongShading(input.Position3D, input.Normal) * (1 - PhongBool);
+	if (bTex)
+	{
+		return tex.Sample(TextureSampler, input.TextureUV);
+	}
+	else
+	{
+		float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();
+			color += PhongShading(input.Position3D, input.Normal) * PhongBool + BlinnPhongShading(input.Position3D, input.Normal) * (1 - PhongBool);
 
-	return color;
+		return color;
+	}
 }
 
 technique Simple
@@ -134,6 +154,16 @@ technique Simple
 	pass Pass0
 	{
 		VertexShader = compile vs_2_0 SimpleVertexShader();
-		PixelShader  = compile ps_2_0 SimplePixelShader();
+		PixelShader  = compile ps_2_0 SimplePixelShader(false);
 	}
 }
+
+technique Texture
+{
+	pass Pass0
+	{
+		VertexShader = compile vs_2_0 SimpleVertexShader();
+		PixelShader = compile ps_2_0 SimplePixelShader(true);
+	}
+}
+
