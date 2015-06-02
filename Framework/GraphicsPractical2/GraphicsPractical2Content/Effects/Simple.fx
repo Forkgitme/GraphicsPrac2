@@ -21,6 +21,7 @@ float SpecularPower;
 
 float PhongBool;
 
+// Loads a texture for the quad
 texture2D tex;
 
 //---------------------------------- Input / Output structures ----------------------------------
@@ -51,6 +52,8 @@ struct VertexShaderOutput
 	float4 Position3D : TEXCOORD2;
 };
 
+
+// Sets the samplerstate to have the textures wrap
 SamplerState TextureSampler
 {
 	Filter = MIN_MAG_MIP_LINEAR;
@@ -129,6 +132,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	float3 newNormal = normalize(mul((float3x3)InverseTransposed, input.Normal));
 	output.Normal.xyz = newNormal;
 
+	//Copy the coordinates to the pixel shader
 	output.TextureUV = input.TextureUV;
 
 	return output;
@@ -138,10 +142,12 @@ float4 SimplePixelShader(VertexShaderOutput input, uniform bool bTex) : COLOR0
 {
 	if (bTex)
 	{
+		// If the bTex boolean is true (when in the Texture technique) sample the texture
 		return tex.Sample(TextureSampler, input.TextureUV);
 	}
 	else
 	{
+		//otherwise use lighting
 		float4 color = LambertianShading(input.Position3D, input.Normal) + AmbientShading();
 			color += PhongShading(input.Position3D, input.Normal) * PhongBool + BlinnPhongShading(input.Position3D, input.Normal) * (1 - PhongBool);
 

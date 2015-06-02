@@ -176,18 +176,20 @@ namespace GraphicsPractical2
             effect.CurrentTechnique = effect.Techniques["Simple"];
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
+            // Set the world matrix and move the theepot so it is on top of the plane
             effect.Parameters["World"].SetValue(Matrix.Multiply(world, Matrix.CreateTranslation(new Vector3(0, 10, 0))));
             effect.Parameters["InverseTransposed"].SetValue(Matrix.Transpose(Matrix.Invert(world)));
             effect.Parameters["tex"].SetValue(texture);
             // Draw the model
             mesh.Draw();
 
+            // Define the correct technique and set the world matrix to transform the quad correctly
             effect.CurrentTechnique = effect.Techniques["Texture"];
             effect.Parameters["World"].SetValue(quadTransform);
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
-
+                // Draws the quad
                 pass.Apply();
                 GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, quadVertices, 0, 4, quadIndices, 0, 2);
             }
