@@ -123,21 +123,21 @@ namespace GraphicsPractical2
 
             this.quadVertices = new VertexPositionNormalTexture[4];
             // Top left
-            this.quadVertices[0].Position = new Vector3(-10, 0, -10);
+            this.quadVertices[0].Position = new Vector3(-1, 0, -1);
             this.quadVertices[0].Normal = quadNormal;
-            this.quadVertices[0].TextureCoordinate = new Vector2(0.0f, 1.0f);
+            this.quadVertices[0].TextureCoordinate = new Vector2(0.0f, 2.0f);
             // Top right
-            this.quadVertices[1].Position = new Vector3(10, 0, -10);
+            this.quadVertices[1].Position = new Vector3(1, 0, -1);
             this.quadVertices[1].Normal = quadNormal;
-            this.quadVertices[1].TextureCoordinate = new Vector2(1.0f, 1.0f);
+            this.quadVertices[1].TextureCoordinate = new Vector2(2.0f, 2.0f);
             // Bottom left
-            this.quadVertices[2].Position = new Vector3(-10, 0, 10);
+            this.quadVertices[2].Position = new Vector3(-1, 0, 1);
             this.quadVertices[2].Normal = quadNormal;
             this.quadVertices[2].TextureCoordinate = new Vector2(0.0f, 0.0f);
             // Bottom right
-            this.quadVertices[3].Position = new Vector3(10, 0, 10);
+            this.quadVertices[3].Position = new Vector3(1, 0, 1);
             this.quadVertices[3].Normal = quadNormal;
-            this.quadVertices[3].TextureCoordinate = new Vector2(1.0f, 0.0f);
+            this.quadVertices[3].TextureCoordinate = new Vector2(2.0f, 0.0f);
 
             this.quadIndices = new short[] { 0, 1, 2, 1, 2, 3 };
             this.quadTransform = Matrix.CreateScale(scale);
@@ -176,13 +176,14 @@ namespace GraphicsPractical2
             effect.CurrentTechnique = effect.Techniques["Simple"];
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
-            effect.Parameters["World"].SetValue(world);
+            effect.Parameters["World"].SetValue(Matrix.Multiply(world, Matrix.CreateTranslation(new Vector3(0, 10, 0))));
             effect.Parameters["InverseTransposed"].SetValue(Matrix.Transpose(Matrix.Invert(world)));
             effect.Parameters["tex"].SetValue(texture);
             // Draw the model
             mesh.Draw();
 
             effect.CurrentTechnique = effect.Techniques["Texture"];
+            effect.Parameters["World"].SetValue(quadTransform);
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
