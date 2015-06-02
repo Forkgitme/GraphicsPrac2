@@ -1,6 +1,6 @@
 Content\Effects\Simple.xnb
+Content\Effects\PostProcessing.xnb
+Content\Effects\Texture.xnb
 Content\Models\Teapot.xnb
 Content\Normal Maps\CobblestonesNormal.xnb
 Content\Textures\CobblestonesDiffuse.xnb
-Content\Effects\PostProcessing.xnb
-Content\Effects\Texture.xnb
